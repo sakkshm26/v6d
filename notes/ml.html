@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Machine Learning with Vineyard &mdash; vineyard  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/vineyard.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Frequently Asked Questions" href="faq.html" />
+    <link rel="prev" title="Dask on Vineyard" href="dask.html" />
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6CYXWKLJB8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6CYXWKLJB8');
+</script>
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> vineyard
+          </a>
+              <div class="version">
+                0.3.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="divein.html">Diving into vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/adding-custom-datatypes-cpp.html">Adding Custom Data Types in C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/distributed-learning.html">Distributed Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Third-party Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="airflow.html">Airflow on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dask.html">Dask on Vineyard</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Machine Learning with Vineyard</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tensorflow">TensorFlow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-numpy-data">Using Numpy Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-dataframe">Using Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-recordbatch-of-pyarrow">Using RecordBatch of Pyarrow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-tables-of-pyarrow">Using Tables of Pyarrow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pytorch">PyTorch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Using Numpy Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Using Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Using RecordBatch of Pyarrow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Using Tables of Pyarrow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mxnet">MxNet</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Using Numpy Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Using Dataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Using RecordBatch of Pyarrow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Using Tables of Pyarrow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#xgboost">XGBoost</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-vineyard-tensor">From Vineyard::Tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-vineyard-dataframe">From Vineyard::DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-vineyard-recordbatch">From Vineyard::RecordBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-vineyard-table">From Vineyard::Table</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nvidia-dali">Nvidia-DALI</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ctl.html">Vineyard Cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp-api.html">C++ API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python-api.html">Python API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">vineyard</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Machine Learning with Vineyard</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notes/ml.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="machine-learning-with-vineyard">
+<h1>Machine Learning with Vineyard<a class="headerlink" href="#machine-learning-with-vineyard" title="Permalink to this headline"></a></h1>
+<p><strong>Vineyard-ML</strong>: A Vineyard package that integrates Machine Learning Frameworks to Vineyard.</p>
+<div class="section" id="tensorflow">
+<h2>TensorFlow<a class="headerlink" href="#tensorflow" title="Permalink to this headline"></a></h2>
+<div class="section" id="using-numpy-data">
+<h3>Using Numpy Data<a class="headerlink" href="#using-numpy-data" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vineyard.contrib.ml</span> <span class="kn">import</span> <span class="n">tensorflow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Vineyard supports the <code class="docutils literal notranslate"><span class="pre">tf.data.Dataset</span></code>. The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be a shared-memory object
+from the vineyard.</p>
+</div>
+<div class="section" id="using-dataframe">
+<h3>Using Dataframe<a class="headerlink" href="#using-dataframe" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">label</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Wrap the dataframe with <code class="docutils literal notranslate"><span class="pre">tf.data.Dataset</span></code>. This enables the use of feature columns as a
+bridge to map from the columns in Pandas Dataframe to features in Dataset. The
+dataset should return a dictionary of column names (from the dataframe) that maps
+to column values. The dataset should only contain <code class="docutils literal notranslate"><span class="pre">numerical</span> <span class="pre">data</span></code>.</p>
+</div>
+<div class="section" id="using-recordbatch-of-pyarrow">
+<h3>Using RecordBatch of Pyarrow<a class="headerlink" href="#using-recordbatch-of-pyarrow" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Vineyard supports direct integration of RecordBatch. The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> object will
+be a TensorFlow Dataset, i.e. <code class="docutils literal notranslate"><span class="pre">tf.data.Dataset</span></code>. Here the <code class="docutils literal notranslate"><span class="pre">label</span></code> row should be named as <code class="docutils literal notranslate"><span class="pre">label</span></code>.</p>
+</div>
+<div class="section" id="using-tables-of-pyarrow">
+<h3>Using Tables of Pyarrow<a class="headerlink" href="#using-tables-of-pyarrow" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batches</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_batches</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Vineyard supports direct integration of Tables as well. Here, the <code class="docutils literal notranslate"><span class="pre">vin_data</span></code>
+object will be of type TensorFlow Dataset, i.e. <code class="docutils literal notranslate"><span class="pre">tf.data.Dataset</span></code>. Here the <code class="docutils literal notranslate"><span class="pre">label</span></code> row
+should be named as <code class="docutils literal notranslate"><span class="pre">label</span></code>.</p>
+</div>
+</div>
+<div class="section" id="pytorch">
+<h2>PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline"></a></h2>
+<div class="section" id="id1">
+<h3>Using Numpy Data<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p>Vineyard supports <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">Datasets</span></code> inherited from the PyTorch Dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vineyard.contrib.ml</span> <span class="kn">import</span> <span class="n">pytorch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s1">&#39;Tensor&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The dataset object should be an object of the type CustomDataset class which is inherited
+from <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> class. Adding the typename as <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> is important.
+The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be of type <code class="docutils literal notranslate"><span class="pre">torch.utils.data.TensorDataset</span></code>.</p>
+</div>
+<div class="section" id="id2">
+<h3>Using Dataframe<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;c)</span>
+</pre></div>
+</div>
+<p>While using the PyTorch form of the dataframe with vineyard, it is important to mention
+the typename as <code class="docutils literal notranslate"><span class="pre">Dataframe</span></code>, a list of column names in <code class="docutils literal notranslate"><span class="pre">cols</span></code> and the <code class="docutils literal notranslate"><span class="pre">label</span></code>
+name in label tag. The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be of the form <code class="docutils literal notranslate"><span class="pre">TensorDataset</span></code> with
+the label as mentioned with the label tag. If no value is passed to the label tag
+vineyard will consider the default value which is the value of label passed in while
+calling the <code class="docutils literal notranslate"><span class="pre">put</span></code> method</p>
+</div>
+<div class="section" id="id3">
+<h3>Using RecordBatch of Pyarrow<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;f2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be of the form <code class="docutils literal notranslate"><span class="pre">TensorDataset</span></code> with the label as mentioned
+with the label tag. In this case it is important to mention the label tag.</p>
+</div>
+<div class="section" id="id4">
+<h3>Using Tables of Pyarrow<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batches</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_batches</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;f2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> object will be of the form <code class="docutils literal notranslate"><span class="pre">TensorDataset</span></code> with the label as mentioned
+with the label tag. In this case, it is important to mention the label tag.</p>
+</div>
+</div>
+<div class="section" id="mxnet">
+<h2>MxNet<a class="headerlink" href="#mxnet" title="Permalink to this headline"></a></h2>
+<div class="section" id="id5">
+<h3>Using Numpy Data<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<p>Vineyard supports <code class="docutils literal notranslate"><span class="pre">Array</span> <span class="pre">Datasets</span></code> from the gluon.data of MxNet.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mxnet</span> <span class="k">as</span> <span class="nn">mx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vineyard.contrib.ml</span> <span class="kn">import</span> <span class="n">mxnet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">gluon</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ArrayDataset</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s1">&#39;Tensor&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The dataset object should be an object of the type ArrayDataset from <code class="docutils literal notranslate"><span class="pre">mxnet.gluon.data</span></code>
+class. Here, Adding the typename as <code class="docutils literal notranslate"><span class="pre">Tensor</span></code> is important. The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be
+of type <code class="docutils literal notranslate"><span class="pre">mxnet.gluon.data.ArrayDataset</span></code>.</p>
+</div>
+<div class="section" id="id6">
+<h3>Using Dataframe<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">gluon</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ArrayDataset</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">typename</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;c)</span>
+</pre></div>
+</div>
+<p>While using the MxNet form of the dataframe with vineyard, it is important to mention
+the typename as <code class="docutils literal notranslate"><span class="pre">Dataframe</span></code>, a list of column names in <code class="docutils literal notranslate"><span class="pre">cols</span></code> and the <code class="docutils literal notranslate"><span class="pre">label</span></code>
+name in label tag. The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be of the form <code class="docutils literal notranslate"><span class="pre">ArrayDataset</span></code> with
+the label as mentioned with the label tag. If no value is passed to the label tag
+vineyard will consider the default value which is the value of label passed in while
+calling the <code class="docutils literal notranslate"><span class="pre">put</span></code> method</p>
+</div>
+<div class="section" id="id7">
+<h3>Using RecordBatch of Pyarrow<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;f2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> will be of the form <code class="docutils literal notranslate"><span class="pre">ArrayDataset</span></code> with the label as mentioned
+with the label tag. In this case it is important to mention the label tag.</p>
+</div>
+<div class="section" id="id8">
+<h3>Using Tables of Pyarrow<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batches</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_batches</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_data</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;f2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">vin_data</span></code> object will be of the form <code class="docutils literal notranslate"><span class="pre">ArrayDataset</span></code> with the label as mentioned
+with the label tag. In this case, it is important to mention the label tag.</p>
+</div>
+</div>
+<div class="section" id="xgboost">
+<h2>XGBoost<a class="headerlink" href="#xgboost" title="Permalink to this headline"></a></h2>
+<p>Vineyard supports resolving <code class="docutils literal notranslate"><span class="pre">XGBoost::DMatrix</span></code> from various kinds of vineyard data types.</p>
+<div class="section" id="from-vineyard-tensor">
+<h3>From Vineyard::Tensor<a class="headerlink" href="#from-vineyard-tensor" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_tensor_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dmatrix</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vin_tensor_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">dmatrix</span></code> will be a <code class="docutils literal notranslate"><span class="pre">DMatrix</span></code> instance with the same shape <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">5)</span></code> resolved from the <code class="docutils literal notranslate"><span class="pre">Vineyard::Tensor</span></code>
+object with the id <code class="docutils literal notranslate"><span class="pre">vin_tensor_id</span></code>.</p>
+</div>
+<div class="section" id="from-vineyard-dataframe">
+<h3>From Vineyard::DataFrame<a class="headerlink" href="#from-vineyard-dataframe" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_df_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dmatrix</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vin_df_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">dmatrix</span></code> will be a <code class="docutils literal notranslate"><span class="pre">DMatrix</span></code> instance with shape of <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">2)</span></code> and <code class="docutils literal notranslate"><span class="pre">feature_names</span></code> of <code class="docutils literal notranslate"><span class="pre">['b',</span> <span class="pre">'c']</span></code>.
+While the label of <code class="docutils literal notranslate"><span class="pre">dmatrix</span></code> is the values of column <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<p>Sometimes the dataframe is a complex data structure and only <code class="docutils literal notranslate"><span class="pre">one</span></code> column will be used as the <code class="docutils literal notranslate"><span class="pre">features</span></code>.
+We support this case by providing the <code class="docutils literal notranslate"><span class="pre">data</span></code> kwarg.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                   <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_df_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dmatrix</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vin_df_id</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">dmatrix</span></code> will have the shape of <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">3)</span></code> corresponding to the values of column <code class="docutils literal notranslate"><span class="pre">b</span></code>.
+While the label is the values of column <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+</div>
+<div class="section" id="from-vineyard-recordbatch">
+<h3>From Vineyard::RecordBatch<a class="headerlink" href="#from-vineyard-recordbatch" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_rb_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dmatrix</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vin_rb_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">dmatrix</span></code> will have the shape of <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">2)</span></code> and <code class="docutils literal notranslate"><span class="pre">feature_names</span></code> of <code class="docutils literal notranslate"><span class="pre">['f0',</span> <span class="pre">'f1']</span></code>.
+While the label is the values of column <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+</div>
+<div class="section" id="from-vineyard-table">
+<h3>From Vineyard::Table<a class="headerlink" href="#from-vineyard-table" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">RecordBatch</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batches</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_batches</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_tab_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dmatrix</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vin_tab_id</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">dmatrix</span></code> will have the shape of <code class="docutils literal notranslate"><span class="pre">(6,</span> <span class="pre">2)</span></code> and <code class="docutils literal notranslate"><span class="pre">feature_names</span></code> of <code class="docutils literal notranslate"><span class="pre">['f0',</span> <span class="pre">'f2']</span></code>.
+While the label is the values of column <code class="docutils literal notranslate"><span class="pre">label</span></code>.</p>
+</div>
+</div>
+<div class="section" id="nvidia-dali">
+<h2>Nvidia-DALI<a class="headerlink" href="#nvidia-dali" title="Permalink to this headline"></a></h2>
+<p>Vineyard suports integration of <code class="docutils literal notranslate"><span class="pre">Dali</span> <span class="pre">Pipelines</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nvidia.dali</span> <span class="kn">import</span> <span class="n">pipeline_def</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="n">device_id</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipeline</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe_out</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_id</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">pipe_out</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vin_pipe</span> <span class="o">=</span> <span class="n">vineyard_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case the pipe is a <code class="docutils literal notranslate"><span class="pre">pipeline_def</span></code> function. The data received after executing pipe.run() can
+be stored into vineyard. The Pipeline should only return two values, namely data and label. The return
+type of the data and label values should be of type <code class="docutils literal notranslate"><span class="pre">TensorList</span></code>. The <code class="docutils literal notranslate"><span class="pre">vin_pipe</span></code> object will be the
+output of a simple in-built pipeline after executing the pipeline.build() and pipeline.run(). It will
+simply return two values of type Pipeline.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+      <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <a href="dask.html" class="btn btn-neutral float-left" title="Dask on Vineyard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      </div>
+  
+    <hr/>
+  
+    <div role="contentinfo">
+
+      <p>
+        Vineyard is a <a href="https://www.cncf.io/sandbox-projects/">CNCF sandbox project</a>.
+      </p>
+      <img src="https://v6d.io/_static/cncf-color.svg" alt="CLOUD NATIVE COMPUTING FOUNDATION" width="40%"/>
+      <p>
+        The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation,
+        please see our <a href="https://www.linuxfoundation.org/trademark-usage/">Trademark Usage page</a>.
+      </p>
+
+      <hr/>&#169; Copyright 2019-2021, The Vineyard Contributors.
+
+      <p></p>
+    </div>
+  
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+      <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+  
+  </footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

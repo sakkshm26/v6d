@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vineyard.core.driver &mdash; vineyard  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/vineyard.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6CYXWKLJB8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6CYXWKLJB8');
+</script>
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> vineyard
+          </a>
+              <div class="version">
+                0.3.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/divein.html">Diving into vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/adding-custom-datatypes-cpp.html">Adding Custom Data Types in C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/distributed-learning.html">Distributed Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Third-party Integration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/airflow.html">Airflow on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/dask.html">Dask on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/ml.html">Machine Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/contributing.html">Contributing to vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/ctl.html">Vineyard Cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/cpp-api.html">C++ API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/python-api.html">Python API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">vineyard</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>vineyard.core.driver</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for vineyard.core.driver</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2020-2021 Alibaba Group Holding Limited.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">from</span> <span class="nn">sortedcontainers</span> <span class="kn">import</span> <span class="n">SortedDict</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">find_most_precise_match</span>
+
+
+<div class="viewcode-block" id="DriverContext"><a class="viewcode-back" href="../../../notes/python-api.html#vineyard.core.driver.DriverContext">[docs]</a><span class="k">class</span> <span class="nc">DriverContext</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span> <span class="o">=</span> <span class="n">SortedDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typename_prefix</span><span class="p">,</span> <span class="n">meth</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">typename_prefix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">[</span><span class="n">typename_prefix</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">[</span><span class="n">typename_prefix</span><span class="p">][</span><span class="n">meth</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
+
+    <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">typename</span><span class="p">):</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="n">find_most_precise_match</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">meth</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">methods</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># if shouldn&#39;t failed, since it has already been wrapped in during</span>
+                <span class="c1"># resolving</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">meth</span><span class="p">,</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">typename</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">typename</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drivers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">DriverContext</span><span class="p">()</span>
+        <span class="n">driver</span><span class="o">.</span><span class="n">__factory</span><span class="o">.</span><span class="n">update</span><span class="p">(((</span><span class="n">k</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">drivers</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ty</span><span class="p">,</span> <span class="n">methods</span> <span class="ow">in</span> <span class="n">drivers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">ty</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">:</span>
+                    <span class="n">driver</span><span class="o">.</span><span class="n">__factory</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">driver</span><span class="o">.</span><span class="n">__factory</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">driver</span></div>
+
+
+<span class="n">default_driver_context</span> <span class="o">=</span> <span class="n">DriverContext</span><span class="p">()</span>
+
+<span class="n">_driver_context_local</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+<span class="n">_driver_context_local</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="n">default_driver_context</span>
+
+
+<div class="viewcode-block" id="get_current_drivers"><a class="viewcode-back" href="../../../notes/python-api.html#vineyard.core.driver.get_current_drivers">[docs]</a><span class="k">def</span> <span class="nf">get_current_drivers</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Obtain current driver context.&#39;&#39;&#39;</span>
+    <span class="n">default_driver</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_driver_context_local</span><span class="p">,</span> <span class="s1">&#39;default_driver&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">default_driver</span><span class="p">:</span>
+        <span class="n">default_driver</span> <span class="o">=</span> <span class="n">default_driver_context</span><span class="o">.</span><span class="n">extend</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">default_driver</span></div>
+
+
+<div class="viewcode-block" id="driver_context"><a class="viewcode-back" href="../../../notes/python-api.html#vineyard.core.driver.driver_context">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">driver_context</span><span class="p">(</span><span class="n">drivers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Open a new context for register drivers, without populting outside global</span>
+<span class="sd">    environment.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        builder_context</span>
+<span class="sd">        resolver_context</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">current_driver</span> <span class="o">=</span> <span class="n">get_current_drivers</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">drivers</span> <span class="o">=</span> <span class="n">drivers</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">base</span> <span class="ow">or</span> <span class="n">current_driver</span>
+        <span class="n">local_driver</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">drivers</span><span class="p">)</span>
+        <span class="n">_driver_context_local</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="n">local_driver</span>
+        <span class="k">yield</span> <span class="n">local_driver</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_driver_context_local</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="n">current_driver</span></div>
+
+
+<span class="k">def</span> <span class="nf">register_builtin_drivers</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">DriverContext</span><span class="p">)</span>
+
+    <span class="c1"># TODO</span>
+    <span class="c1"># there&#39;s no builtin drivers yet.</span>
+
+
+<span class="k">def</span> <span class="nf">registerize</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Registerize a method, add a `__factory` attribute and a `register`</span>
+<span class="sd">    interface to a method.</span>
+
+<span class="sd">    multiple-level register is automatically supported, users can</span>
+
+<span class="sd">    &gt;&gt;&gt; open.register(local_io_adaptor)</span>
+<span class="sd">    &gt;&gt;&gt; open.register(oss_io_adaptor)</span>
+
+<span class="sd">    OR</span>
+
+<span class="sd">    &gt;&gt;&gt; open.register(&#39;file&#39;, local_io_adaptor)</span>
+<span class="sd">    &gt;&gt;&gt; open.register(&#39;odps&#39;, odps_io_adaptor)</span>
+
+<span class="sd">    OR</span>
+
+<span class="sd">    &gt;&gt;&gt; open.register(&#39;file&#39;, &#39;csv&#39;, local_csv_reader)</span>
+<span class="sd">    &gt;&gt;&gt; open.register(&#39;file&#39;, &#39;tsv&#39;, local_tsv_reader)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">wrap</span><span class="p">,</span> <span class="s1">&#39;__factory&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Invalid arguments: inconsistent with existing registerations&#39;</span>
+                <span class="p">)</span>
+            <span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Invalid arguments: inconsistent with existing registerations&#39;</span>
+                <span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">wrap</span><span class="o">.</span><span class="n">__factory</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+                    <span class="n">root</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+                <span class="n">root</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">root</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">wrap</span><span class="p">,</span> <span class="s1">&#39;register&#39;</span><span class="p">,</span> <span class="n">register</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrap</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;default_driver_context&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;register_builtin_drivers&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;driver_context&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_current_drivers&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;registerize&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+    <hr/>
+  
+    <div role="contentinfo">
+
+      <p>
+        Vineyard is a <a href="https://www.cncf.io/sandbox-projects/">CNCF sandbox project</a>.
+      </p>
+      <img src="https://v6d.io/_static/cncf-color.svg" alt="CLOUD NATIVE COMPUTING FOUNDATION" width="40%"/>
+      <p>
+        The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation,
+        please see our <a href="https://www.linuxfoundation.org/trademark-usage/">Trademark Usage page</a>.
+      </p>
+
+      <hr/>&#169; Copyright 2019-2021, The Vineyard Contributors.
+
+      <p></p>
+    </div>
+  
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+      <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+  
+  </footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

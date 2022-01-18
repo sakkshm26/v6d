@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vineyard Cli &mdash; vineyard  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/vineyard.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="C++ API Reference" href="cpp-api.html" />
+    <link rel="prev" title="Contributing to vineyard" href="contributing.html" />
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6CYXWKLJB8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6CYXWKLJB8');
+</script>
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> vineyard
+          </a>
+              <div class="version">
+                0.3.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="divein.html">Diving into vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/adding-custom-datatypes-cpp.html">Adding Custom Data Types in C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/distributed-learning.html">Distributed Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Third-party Integration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="airflow.html">Airflow on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dask.html">Dask on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ml.html">Machine Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vineyard Cli</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-commands">Supported Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#autocomplete">Autocomplete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connect-to-a-vineyard-server">Connect to a vineyard server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ls">ls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query">query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#head">head</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copy">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#del">del</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stat">stat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#put">put</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#config">config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#migrate">migrate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debug">debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start">start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp-api.html">C++ API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python-api.html">Python API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">vineyard</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Vineyard Cli</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notes/ctl.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="vineyard-cli">
+<h1>Vineyard Cli<a class="headerlink" href="#vineyard-cli" title="Permalink to this headline"></a></h1>
+<p><strong>vineyard-ctl</strong>: A command-line tool for <strong>vineyard</strong>.</p>
+<div class="section" id="supported-commands">
+<h2>Supported Commands<a class="headerlink" href="#supported-commands" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">ls</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">query</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">head</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">copy</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">del</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">stat</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">put</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">config</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">migrate</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">debug</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">start</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="autocomplete">
+<h2>Autocomplete<a class="headerlink" href="#autocomplete" title="Permalink to this headline"></a></h2>
+<p>Autocomplete for vineyard-ctl is only supported for the bash shell currently.</p>
+<p>Follow the following steps to enable autocomplete for vineyard-ctl on your system:</p>
+<ul class="simple">
+<li><p>Install <code class="code docutils literal notranslate"><span class="pre">argcomplete</span></code> via <code class="code docutils literal notranslate"><span class="pre">pip3</span></code>: <code class="code docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">argcomplete</span></code>.</p></li>
+<li><p>Copy the <code class="code docutils literal notranslate"><span class="pre">python/vineyard/cli.py</span></code> file to <code class="code docutils literal notranslate"><span class="pre">/usr/local/bin</span></code>.</p></li>
+<li><p>Add <code class="code docutils literal notranslate"><span class="pre">eval</span> <span class="pre">&quot;$(register-python-argcomplete</span> <span class="pre">cli.py)&quot;</span></code> to <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code>.</p></li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">/etc/profile</span></code>.</p></li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code>.</p></li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">activate-global-python-argcomplete</span></code></p></li>
+</ul>
+<p>That is it. You’re good to go. Autocomplete will be enabled working for vineyard-ctl.</p>
+<p>Example:</p>
+<p>In the bash shell, type <code class="code docutils literal notranslate"><span class="pre">vineyard-ctl</span> <span class="pre">sta</span></code> and press <code class="code docutils literal notranslate"><span class="pre">tab</span></code>, it will autocomplete to <code class="code docutils literal notranslate"><span class="pre">vineyard-ctl</span> <span class="pre">start</span></code></p>
+</div>
+<div class="section" id="connect-to-a-vineyard-server">
+<h2>Connect to a vineyard server<a class="headerlink" href="#connect-to-a-vineyard-server" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Via command-line:</dt><dd><p>Options:</p>
+<ul>
+<li><p><code class="code docutils literal notranslate"><span class="pre">ipc_socket</span></code>: Socket location of connected vineyard server.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_host</span></code>: RPC HOST of the connected vineyard server.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_port</span></code>: RPC PORT of the connected vineyard server.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_endpoint</span></code>: RPC endpoint of the connected vineyard server.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl --ipc_socket /var/run/vineyard.sock
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Via vineyard configuraion file:</p></li>
+</ul>
+<p>This will pick IPC or RPC values from the vineyard configuration file.</p>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl <span class="o">{</span>command<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ls">
+<h2>ls<a class="headerlink" href="#ls" title="Permalink to this headline"></a></h2>
+<p>List vineyard objects.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">pattern</span></code>: The pattern string that will be matched against the object’s typename.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">regex</span></code>: The pattern string will be considered as a regex expression.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">limit</span></code>: The limit to list.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl ls --pattern * --regex --limit <span class="m">8</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="query">
+<h2>query<a class="headerlink" href="#query" title="Permalink to this headline"></a></h2>
+<p>Query a vineyard object.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">object_id</span></code>: ID of the object to be fetched.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">meta</span></code>: Metadata of the object (<strong>Simple</strong> or <strong>JSON</strong>).</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">metric</span></code>: Metric data of the object (<strong>nbytes</strong> or <strong>signature</strong> or <strong>typename</strong>).</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">exists</span></code>: Check if the object exists or not.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">stdout</span></code>: Get object to stdout.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">output_file</span></code>: Get object to file.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">tree</span></code>: Get object lineage in tree-like style.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">memory_status</span></code>: Get the memory used by the vineyard object.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">detail</span></code>: Get detailed memory used by the vineyard object.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl query --object_id 00002ec13bc81226 --meta json --metric typename
+</pre></div>
+</div>
+</div>
+<div class="section" id="head">
+<h2>head<a class="headerlink" href="#head" title="Permalink to this headline"></a></h2>
+<p>Print first n(limit) lines of a vineyard object. Currently supported for a pandas dataframe only.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">object_id</span></code>: ID of the object to be printed.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">limit</span></code>: Number of lines of the object to be printed.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl head --object_id 00002ec13bc81226 --limit <span class="m">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="copy">
+<h2>copy<a class="headerlink" href="#copy" title="Permalink to this headline"></a></h2>
+<p>Copy a vineyard object.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">object_id</span></code>: ID of the object to be copied.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">shallow</span></code>: Get a shallow copy of the object.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">deep</span></code>: Get a deep copy of the object.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl copy --object_id 00002ec13bc81226 --shallow
+</pre></div>
+</div>
+</div>
+<div class="section" id="del">
+<h2>del<a class="headerlink" href="#del" title="Permalink to this headline"></a></h2>
+<p>Delete a vineyard object.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">object_id</span></code>: ID of the object to be deleted.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">regex_pattern</span></code>: Delete all the objects that match the regex pattern.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">force</span></code>: Recursively delete even if the member object is also referred by others.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">deep</span></code>: Deeply delete an object means we will deleting the members recursively.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl del --object_id 00002ec13bc81226 --force
+</pre></div>
+</div>
+</div>
+<div class="section" id="stat">
+<h2>stat<a class="headerlink" href="#stat" title="Permalink to this headline"></a></h2>
+<p>Get the status of connected vineyard server.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">instance_id</span></code>: Instance ID of vineyardd that the client is connected to.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">deployment</span></code>: The deployment mode of the connected vineyardd cluster.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">memory_usage</span></code>: Memory usage (in bytes) of current vineyardd instance.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">memory_limit</span></code>: Memory limit (in bytes) of current vineyardd instance.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">deferred_requests</span></code>: Number of waiting requests of current vineyardd instance.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">ipc_connections</span></code>: Number of alive IPC connections on the current vineyardd instance.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_connections</span></code>: Number of alive RPC connections on the current vineyardd instance.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl stat
+</pre></div>
+</div>
+</div>
+<div class="section" id="put">
+<h2>put<a class="headerlink" href="#put" title="Permalink to this headline"></a></h2>
+<p>Put a python value to vineyard.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">value</span></code>: The python value you want to put to the vineyard server.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">file</span></code>: The file you want to put to the vineyard server as a pandas dataframe.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">sep</span></code>: Delimiter used in the file.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">delimiter</span></code>: Delimiter used in the file.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">header</span></code>: Row number to use as the column names.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl put --file example_csv_file.csv --sep ,
+</pre></div>
+</div>
+</div>
+<div class="section" id="config">
+<h2>config<a class="headerlink" href="#config" title="Permalink to this headline"></a></h2>
+<p>Edit configuration file.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">ipc_socket_value</span></code>: The ipc_socket value to enter in the config file.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_host_value</span></code>: The rpc_host value to enter in the config file.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_port_value</span></code>: The rpc_port value to enter in the config file.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_endpoint_value</span></code>: The rpc_endpoint value to enter in the config file.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl config --ipc_socket_value /var/run/vineyard.sock
+</pre></div>
+</div>
+</div>
+<div class="section" id="migrate">
+<h2>migrate<a class="headerlink" href="#migrate" title="Permalink to this headline"></a></h2>
+<p>Migrate a vineyard object.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">ipc_socket_value</span></code>: The ipc_socket value for the second client.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_host_value</span></code>: The rpc_host value for the second client.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_port_value</span></code>: The rpc_port value for the second client.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_endpoint_value</span></code>: The rpc_endpoint value for the second client.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">object_id</span></code>: ID of the object to be migrated.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">local</span></code>: Migrate the vineyard object local to local.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">remote</span></code>: Migrate the vineyard object remote to local.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl migrate --ipc_socket_value /tmp/vineyard.sock --object_id 00002ec13bc81226 --remote
+</pre></div>
+</div>
+</div>
+<div class="section" id="debug">
+<h2>debug<a class="headerlink" href="#debug" title="Permalink to this headline"></a></h2>
+<p>Issue a debug request.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">payload</span></code>: The payload that will be sent to the debug handler.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl debug --payload <span class="s1">&#39;{&quot;instance_status&quot;:[], &quot;memory_size&quot;:[]}&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="start">
+<h2>start<a class="headerlink" href="#start" title="Permalink to this headline"></a></h2>
+<p>Start vineyardd.</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">local</span></code>: start a local vineyard cluster.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">distributed</span></code>: start a local vineyard cluster in a distributed fashion.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">hosts</span></code>: A list of machines to launch vineyard server.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">etcd_endpoints</span></code>: Launching vineyard using specified etcd endpoints. If not specified, vineyard will launch its own etcd instance.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">vineyardd_path</span></code>: Location of vineyard server program. If not specified, vineyard will use its own bundled vineyardd binary.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">size</span></code>: The memory size limit for vineyard’s shared memory. The memory size can be a plain integer or as a fixed-point number using one of these suffixes: E, P, T, G, M, K. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">socket</span></code>: The UNIX domain socket socket path that vineyard server will listen on. When the socket parameter is None, a random path under temporary directory will be generated and used.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rpc_socket_port</span></code>: The port that vineyard will use to privode RPC service.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">debug</span></code>: Whether print debug logs.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vineyard-ctl start --local
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+      <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing to vineyard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <a href="cpp-api.html" class="btn btn-neutral float-right" title="C++ API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      </div>
+  
+    <hr/>
+  
+    <div role="contentinfo">
+
+      <p>
+        Vineyard is a <a href="https://www.cncf.io/sandbox-projects/">CNCF sandbox project</a>.
+      </p>
+      <img src="https://v6d.io/_static/cncf-color.svg" alt="CLOUD NATIVE COMPUTING FOUNDATION" width="40%"/>
+      <p>
+        The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation,
+        please see our <a href="https://www.linuxfoundation.org/trademark-usage/">Trademark Usage page</a>.
+      </p>
+
+      <hr/>&#169; Copyright 2019-2021, The Vineyard Contributors.
+
+      <p></p>
+    </div>
+  
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+      <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+  
+  </footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vineyard.core.resolver &mdash; vineyard  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/vineyard.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+ 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6CYXWKLJB8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6CYXWKLJB8');
+</script>
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> vineyard
+          </a>
+              <div class="version">
+                0.3.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/divein.html">Diving into vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/adding-custom-datatypes-cpp.html">Adding Custom Data Types in C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/distributed-learning.html">Distributed Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Third-party Integration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/airflow.html">Airflow on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/dask.html">Dask on Vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/ml.html">Machine Learning with Vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/roadmap.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/contributing.html">Contributing to vineyard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/ctl.html">Vineyard Cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/cpp-api.html">C++ API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/python-api.html">Python API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">vineyard</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>vineyard.core.resolver</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for vineyard.core.resolver</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2020-2021 Alibaba Group Holding Limited.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">from</span> <span class="nn">sortedcontainers</span> <span class="kn">import</span> <span class="n">SortedDict</span>
+<span class="kn">from</span> <span class="nn">vineyard._C</span> <span class="kn">import</span> <span class="n">IPCClient</span>
+<span class="kn">from</span> <span class="nn">vineyard._C</span> <span class="kn">import</span> <span class="n">Object</span>
+<span class="kn">from</span> <span class="nn">vineyard._C</span> <span class="kn">import</span> <span class="n">ObjectID</span>
+<span class="kn">from</span> <span class="nn">vineyard._C</span> <span class="kn">import</span> <span class="n">ObjectMeta</span>
+<span class="kn">from</span> <span class="nn">vineyard._C</span> <span class="kn">import</span> <span class="n">RPCClient</span>
+<span class="kn">from</span> <span class="nn">vineyard.core.driver</span> <span class="kn">import</span> <span class="n">get_current_drivers</span>
+<span class="kn">from</span> <span class="nn">vineyard.core.utils</span> <span class="kn">import</span> <span class="n">find_most_precise_match</span>
+
+
+<div class="viewcode-block" id="ResolverContext"><a class="viewcode-back" href="../../../notes/python-api.html#vineyard.ResolverContext">[docs]</a><span class="k">class</span> <span class="nc">ResolverContext</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span> <span class="o">=</span> <span class="n">SortedDict</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typename_prefix</span><span class="p">,</span> <span class="n">resolver</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">[</span><span class="n">typename_prefix</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolver</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">typename</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">typename</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">resolver</span> <span class="o">=</span> <span class="n">find_most_precise_match</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="p">)</span>
+        <span class="n">vineyard_client</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__vineyard_client&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
+            <span class="n">resolver_func_sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">resolver</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">resolver_func_sig</span><span class="o">.</span><span class="n">varkw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">resolver</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># don&#39;t pass the `**kw`.</span>
+                <span class="k">if</span> <span class="s1">&#39;resolver&#39;</span> <span class="ow">in</span> <span class="n">resolver_func_sig</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">resolver</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">resolver</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># if the obj has been resolved by pybind types, and there&#39;s no proper</span>
+                <span class="c1"># resolver, it shouldn&#39;t be an error</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Object</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">obj</span>
+
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Unable to construct the object using resolver: &#39;</span>
+                    <span class="s1">&#39;typename is </span><span class="si">%s</span><span class="s1">, resolver is </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">typename</span><span class="p">,</span> <span class="n">resolver</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="c1"># associate a reference to the base C++ object</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;__vineyard_ref&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;__vineyard_client&#39;</span><span class="p">,</span> <span class="n">vineyard_client</span><span class="p">)</span>
+
+                <span class="c1"># register methods</span>
+                <span class="n">get_current_drivers</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">typename</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="c1"># keep it as it is</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resolvers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">resolver</span> <span class="o">=</span> <span class="n">ResolverContext</span><span class="p">()</span>
+        <span class="n">resolver</span><span class="o">.</span><span class="n">__factory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__factory</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">resolvers</span><span class="p">:</span>
+            <span class="n">resolver</span><span class="o">.</span><span class="n">__factory</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">resolvers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resolver</span></div>
+
+
+<span class="n">default_resolver_context</span> <span class="o">=</span> <span class="n">ResolverContext</span><span class="p">()</span>
+
+<span class="n">_resolver_context_local</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+<span class="n">_resolver_context_local</span><span class="o">.</span><span class="n">default_resolver</span> <span class="o">=</span> <span class="n">default_resolver_context</span>
+
+
+<div class="viewcode-block" id="get_current_resolvers"><a class="viewcode-back" href="../../../notes/python-api.html#vineyard.get_current_resolvers">[docs]</a><span class="k">def</span> <span class="nf">get_current_resolvers</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Obtain current resolver context.&#39;&#39;&#39;</span>
+    <span class="n">default_resolver</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_resolver_context_local</span><span class="p">,</span> <span class="s1">&#39;default_resolver&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">default_resolver</span><span class="p">:</span>
+        <span class="n">default_resolver</span> <span class="o">=</span> <span class="n">default_resolver_context</span><span class="o">.</span><span class="n">extend</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">default_resolver</span></div>
+
+
+<div class="viewcode-block" id="resolver_context"><a class="viewcode-back" href="../../../notes/python-api.html#vineyard.resolver_context">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">resolver_context</span><span class="p">(</span><span class="n">resolvers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Open a new context for register resolvers, without populting outside</span>
+<span class="sd">    the global environment.</span>
+
+<span class="sd">    The :code:`resolver_context` can be useful when users have more than</span>
+<span class="sd">    more resolver for a certain type, e.g., the :code:`vineyard::Tensor`</span>
+<span class="sd">    object can be resolved as :code:`numpy.ndarray` or :code:`xgboost::DMatrix`.</span>
+
+<span class="sd">    We could have</span>
+
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        def numpy_resolver(obj):</span>
+<span class="sd">            ...</span>
+
+<span class="sd">        default_resolver_context.register(&#39;vineyard::Tensor&#39;, numpy_resolver)</span>
+
+<span class="sd">    and</span>
+
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        def xgboost_resolver(obj):</span>
+<span class="sd">            ...</span>
+
+<span class="sd">        default_resolver_context.register(&#39;vineyard::Tensor&#39;, xgboost_resolver)</span>
+
+<span class="sd">    Obviously there&#39;s a conflict, and the stackable :code:`resolver_context` could</span>
+<span class="sd">    help there,</span>
+
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        with resolver_context({&#39;vineyard::Tensor&#39;, xgboost_resolver}):</span>
+<span class="sd">            ...</span>
+
+<span class="sd">    Assuming the default context resolves :code:`vineyard::Tensor` to</span>
+<span class="sd">    :code:`numpy.ndarray`, inside the :code:`with resolver_context` the</span>
+<span class="sd">    :code:`vineyard::Tensor` will be resolved to :code:`xgboost::DMatrix`,</span>
+<span class="sd">    and after exiting the context the global environment will be restored</span>
+<span class="sd">    back as default.</span>
+
+<span class="sd">    The :code:`with resolver_context` is nestable as well.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        builder_context</span>
+<span class="sd">        driver_context</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">current_resolver</span> <span class="o">=</span> <span class="n">get_current_resolvers</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">resolvers</span> <span class="o">=</span> <span class="n">resolvers</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">base</span> <span class="ow">or</span> <span class="n">current_resolver</span>
+        <span class="n">local_resolver</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">resolvers</span><span class="p">)</span>
+        <span class="n">_resolver_context_local</span><span class="o">.</span><span class="n">default_resolver</span> <span class="o">=</span> <span class="n">local_resolver</span>
+        <span class="k">yield</span> <span class="n">local_resolver</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_resolver_context_local</span><span class="o">.</span><span class="n">default_resolver</span> <span class="o">=</span> <span class="n">current_resolver</span></div>
+
+
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">object_id</span><span class="p">,</span> <span class="n">resolver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Get vineyard object as python value.</span>
+
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; arr_id = vineyard.ObjectID(&#39;00002ec13bc81226&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; arr = client.get(arr_id)</span>
+<span class="sd">        &gt;&gt;&gt; arr</span>
+<span class="sd">        array([0, 1, 2, 3, 4, 5, 6, 7])</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        client: IPCClient or RPCClient</span>
+<span class="sd">            The vineyard client to use.</span>
+<span class="sd">        object_id: ObjectID</span>
+<span class="sd">            The object id that will be obtained from vineyard.</span>
+<span class="sd">        resolver:</span>
+<span class="sd">            When retrieving vineyard object, an optional *resolver* can be specified.</span>
+<span class="sd">            If no resolver given, the default resolver context will be used.</span>
+<span class="sd">        kw:</span>
+<span class="sd">            User-specific argument that will be passed to the builder.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A python object that return by the resolver, by resolving an vineyard object.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># wrap object_id</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+        <span class="n">object_id</span> <span class="o">=</span> <span class="n">ObjectID</span><span class="p">(</span><span class="n">object_id</span><span class="p">)</span>
+
+    <span class="c1"># run resolver</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">object_id</span><span class="p">)</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">meta</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="o">.</span><span class="n">islocal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">meta</span><span class="o">.</span><span class="n">isglobal</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Not a local object: for remote object, you can only get its metadata&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">resolver</span> <span class="o">=</span> <span class="n">get_current_resolvers</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">resolver</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">__vineyard_client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+
+<span class="nb">setattr</span><span class="p">(</span><span class="n">IPCClient</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="n">get</span><span class="p">)</span>
+<span class="nb">setattr</span><span class="p">(</span><span class="n">RPCClient</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="n">get</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;default_resolver_context&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;resolver_context&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_current_resolvers&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+    <hr/>
+  
+    <div role="contentinfo">
+
+      <p>
+        Vineyard is a <a href="https://www.cncf.io/sandbox-projects/">CNCF sandbox project</a>.
+      </p>
+      <img src="https://v6d.io/_static/cncf-color.svg" alt="CLOUD NATIVE COMPUTING FOUNDATION" width="40%"/>
+      <p>
+        The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation,
+        please see our <a href="https://www.linuxfoundation.org/trademark-usage/">Trademark Usage page</a>.
+      </p>
+
+      <hr/>&#169; Copyright 2019-2021, The Vineyard Contributors.
+
+      <p></p>
+    </div>
+  
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+      <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>provided by <a href="https://readthedocs.org">Read the Docs</a>.
+     
+  
+  </footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
