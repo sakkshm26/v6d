@@ -50,7 +50,7 @@ typically saved back as tables on HDFS. This can bring some headaches to develop
 1. For the same task, users are forced to program for multiple systems (SQL & Python).
 
 2. Data could be polymorphic. Non-relational data, such as tensors, dataframes and graphs/networks (in `GraphScope`_) are
-   becoming increasingly prevalent. Tables and SQL may not be best way to store/exchange or process them.
+   becoming increasingly prevalent. Tables and SQL may not be the best way to store/exchange or process them.
    Having the data transformed from/to "tables" back and forth between different systems could be a huge
    overhead.
 
@@ -121,7 +121,7 @@ different systems via shared memory without extra overheads. Vineyard eliminates
 the overhead of serialization/deserialization and IO during exchanging immutable
 data between systems.
 
-Out-of-box high level data abstraction
+Out-of-box high-level data abstraction
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Computation frameworks usually have their own data abstractions for high-level concepts,
@@ -131,7 +131,7 @@ has its own graph structure representations.
 
 The variety of data abstractions makes the sharing hard. Vineyard provides out-of-the-box
 high-level data abstractions over in-memory blobs, by describing objects using hierarchical
-metadatas. Various computation systems can utilize the built-in high level data abstractions
+metadatas. Various computation systems can utilize the built-in high-level data abstractions
 to exchange data with other systems in computation pipeline in a concise manner.
 
 Stream pipelining
@@ -141,7 +141,7 @@ A computation doesn't need to wait all precedent's result arrive before starting
 Vineyard provides stream as a special kind of immutable data for such pipelining scenarios.
 The precedent job can write the immutable data chunk by chunk to vineyard, while maintaining
 the data structure semantic, and the successor job reads shared-memory chunks from vineyard's
-stream without extra copy cost, then triggers it's own work. The overlapping helps for
+stream without extra copy cost, then triggers its own work. The overlapping helps for
 reducing the overall processing time and memory consumption.
 
 Drivers
@@ -153,7 +153,7 @@ strategies and migration jobs. As the data structure abstraction usually differs
 between systems such routines cannot be easily reused.
 
 Vineyard provides such common manipulate routines on immutable data as drivers.
-Besides sharing the high level data abstractions, vineyard extends the capability
+Besides sharing the high-level data abstractions, vineyard extends the capability
 of data structures by drivers, enabling out-of-the-box reusable routines for the
 boilerplate part in computation jobs.
 
@@ -169,8 +169,8 @@ Deployment
 ^^^^^^^^^^
 
 For better leveraging the scale-in/out capability of Kubernetes for worker pods of
-a data analytical job, vineyard could be deployed on Kubernetes to as a DaemonSet
-in Kubernetes cluster. Vineyard pods shares memory with worker pods using a UNIX
+a data analytical job, vineyard could be deployed on Kubernetes as a DaemonSet
+in Kubernetes cluster. Vineyard pods share memory with worker pods using a UNIX
 domain socket with fine-grained access control.
 
 The UNIX domain socket can be either mounted on ``hostPath`` or via a ``PersistentVolumeClaim``.
